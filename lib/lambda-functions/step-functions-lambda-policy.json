@@ -1,0 +1,33 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:InvokeFunction"
+      ],
+      "Resource": [
+        "arn:aws:lambda:ap-southeast-1:*:function:DetectLabelsFunction",
+        "arn:aws:lambda:ap-southeast-1:*:function:DetectFacesFunction",
+        "arn:aws:lambda:ap-southeast-1:*:function:TranscribeAudioFunction",
+        "arn:aws:lambda:ap-southeast-1:*:function:GenerateInsightsFunction",
+        "arn:aws:lambda:ap-southeast-1:*:function:StoreMetadataFunction",
+        "arn:aws:lambda:ap-southeast-1:*:function:AiInsightsFunction"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogDelivery",
+        "logs:GetLogDelivery",
+        "logs:UpdateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:ListLogDeliveries",
+        "logs:PutResourcePolicy",
+        "logs:DescribeResourcePolicies",
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
