@@ -5,7 +5,7 @@ import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb"
 
 // Initialize AWS clients with credentials
 const dynamoDBClient = new DynamoDBClient({
-  region: "us-east-1",
+  region: "ap-southeast-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",

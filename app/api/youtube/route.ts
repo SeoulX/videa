@@ -8,7 +8,7 @@ import { Readable } from "stream"
 
 // Initialize AWS clients with credentials
 const s3Client = new S3Client({
-  region: "us-east-1",
+  region: "ap-southeast-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
@@ -16,7 +16,7 @@ const s3Client = new S3Client({
 })
 
 const stepFunctionsClient = new SFNClient({
-  region: "us-east-1",
+  region: "ap-southeast-1",
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
