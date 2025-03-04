@@ -22,33 +22,23 @@ export default function VideoPage({ params }: VideoPageProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // In a real app, we would fetch the video data from the API
-    // For now, we'll use mock data
-    const mockVideo = {
-      id: params.id,
-      title: "Sample Video Analysis",
-      description: "This is a sample video for demonstration purposes.",
-      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      thumbnail: "/placeholder.svg?height=720&width=1280",
-      uploadedAt: "2023-05-15T10:30:00Z",
-      duration: 596, // in seconds
-      insights: {
-        objects: ["person", "car", "tree", "building"],
-        faces: 3,
-        transcript: "This is a sample transcript of the video content...",
-        summary: "A short animated film about a rabbit dealing with bullies in the forest.",
-        keyMoments: [
-          { time: 45, description: "Rabbit appears" },
-          { time: 120, description: "Confrontation with bullies" },
-          { time: 300, description: "Revenge plan begins" },
-        ],
-      },
+    // Fetch the video data from the API
+    const fetchVideo = async () => {
+      try {
+        const response = await fetch(`/api/video/${params.id}`)
+        if (!response.ok) {
+          throw new Error("Failed to fetch video")
+        }
+        const data = await response.json()
+        setVideo(data.video)
+      } catch (error) {
+        console.error("Error fetching video:", error)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    setTimeout(() => {
-      setVideo(mockVideo)
-      setLoading(false)
-    }, 1000)
+    fetchVideo()
   }, [params.id])
 
   if (loading) {
@@ -57,6 +47,22 @@ export default function VideoPage({ params }: VideoPageProps) {
         <div className="text-center">
           <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
           <p className="mt-4 text-muted-foreground">Loading video...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!video) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl font-semibold">Video not found</p>
+          <p className="mt-2 text-muted-foreground">
+            The video you're looking for doesn't exist or is still processing.
+          </p>
+          <Button className="mt-4" asChild>
+            <Link href="/dashboard">Back to Dashboard</Link>
+          </Button>
         </div>
       </div>
     )
@@ -76,9 +82,11 @@ export default function VideoPage({ params }: VideoPageProps) {
           <p className="text-sm text-muted-foreground">{new Date(video.uploadedAt).toLocaleDateString()}</p>
         </div>
         <div className="ml-auto flex gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            Download
+          <Button variant="outline" size="sm" asChild>
+            <a href={video.downloadUrl} download>
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </a>
           </Button>
         </div>
       </header>

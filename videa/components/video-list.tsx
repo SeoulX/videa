@@ -12,39 +12,23 @@ export function VideoList() {
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    // In a real app, we would fetch the videos from the API
-    // For now, we'll use mock data
-    const mockVideos = [
-      {
-        id: "video-1",
-        title: "Company Meeting - Q1 2023",
-        thumbnail: "/placeholder.svg?height=720&width=1280",
-        uploadedAt: "2023-03-15T10:30:00Z",
-        duration: 3600, // in seconds
-        type: "uploaded",
-      },
-      {
-        id: "video-2",
-        title: "Product Demo - New Features",
-        thumbnail: "/placeholder.svg?height=720&width=1280",
-        uploadedAt: "2023-04-20T14:45:00Z",
-        duration: 1200, // in seconds
-        type: "uploaded",
-      },
-      {
-        id: "youtube-1",
-        title: "Marketing Strategy Webinar",
-        thumbnail: "/placeholder.svg?height=720&width=1280",
-        uploadedAt: "2023-05-10T09:15:00Z",
-        duration: 2700, // in seconds
-        type: "youtube",
-      },
-    ]
+    // Fetch videos from the API
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch("/api/videos")
+        if (!response.ok) {
+          throw new Error("Failed to fetch videos")
+        }
+        const data = await response.json()
+        setVideos(data.videos)
+      } catch (error) {
+        console.error("Error fetching videos:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    setTimeout(() => {
-      setVideos(mockVideos)
-      setLoading(false)
-    }, 1000)
+    fetchVideos()
   }, [])
 
   const filteredVideos = videos.filter((video) => video.title.toLowerCase().includes(searchQuery.toLowerCase()))

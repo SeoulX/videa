@@ -1,16 +1,23 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import { RekognitionClient } from "@aws-sdk/client-rekognition"
-import { TranscribeClient } from "@aws-sdk/client-transcribe"
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb"
 import { SFNClient, StartExecutionCommand } from "@aws-sdk/client-sfn"
 
-// Initialize AWS clients
-const s3Client = new S3Client({ region: "us-east-1" })
-const rekognitionClient = new RekognitionClient({ region: "us-east-1" })
-const transcribeClient = new TranscribeClient({ region: "us-east-1" })
-const dynamoDBClient = new DynamoDBClient({ region: "us-east-1" })
-const stepFunctionsClient = new SFNClient({ region: "us-east-1" })
+// Initialize AWS clients with credentials
+const s3Client = new S3Client({
+  region: "us-east-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+  },
+})
+
+const stepFunctionsClient = new SFNClient({
+  region: "us-east-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+  },
+})
 
 export async function POST(request: NextRequest) {
   try {
